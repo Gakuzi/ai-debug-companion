@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Debug Companion</title>
+    <script>
+        // SPA routing fix for GitHub Pages
+        (function() {
+            var location = window.location;
+            var path = location.pathname;
+            
+            // Redirect to the main index.html for SPA routing
+            if (path.indexOf('/ai-debug-companion/') === 0) {
+                var newPath = path.substring('/ai-debug-companion'.length);
+                if (newPath === '' || newPath === '/') {
+                    // Already at the root, do nothing
+                } else {
+                    // Redirect to the root for SPA to handle routing
+                    location.replace('/ai-debug-companion/');
+                }
+            }
+        })();
+    </script>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="module" src="/ai-debug-companion/assets/index-Df2i9sTy.js"></script>
+</body>
+</html>
