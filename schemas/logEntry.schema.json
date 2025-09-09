@@ -1,47 +1,113 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://github.com/Gakuzi/ai-debug-companion/schemas/logEntry.schema.json",
   "title": "LogEntry",
   "type": "object",
   "properties": {
-    "ts": { "type": "string", "format": "date-time" },
-    "level": { "type": "string", "enum": ["DEBUG", "INFO", "WARN", "ERROR", "FATAL"] },
-    "msg": { "type": "string" },
-    "code": { "type": ["string", "number"] },
+    "ts": { 
+      "type": "string", 
+      "format": "date-time",
+      "description": "Timestamp in ISO 8601 format"
+    },
+    "level": { 
+      "type": "string", 
+      "enum": ["DEBUG", "INFO", "WARN", "ERROR", "FATAL"],
+      "description": "Log level"
+    },
+    "msg": { 
+      "type": "string",
+      "description": "Log message"
+    },
+    "code": { 
+      "type": ["string", "number"],
+      "description": "Error code or identifier"
+    },
     "http": {
       "type": "object",
       "properties": {
-        "method": { "type": "string", "enum": ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD"] },
-        "url": { "type": "string" },
-        "status": { "type": "integer" },
-        "latencyMs": { "type": "number", "minimum": 0 }
+        "method": { 
+          "type": "string", 
+          "enum": ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD"],
+          "description": "HTTP method"
+        },
+        "url": { 
+          "type": "string",
+          "description": "Request URL"
+        },
+        "status": { 
+          "type": "integer",
+          "description": "HTTP status code"
+        },
+        "latencyMs": { 
+          "type": "number", 
+          "minimum": 0,
+          "description": "Request latency in milliseconds"
+        }
       },
-      "additionalProperties": false
+      "additionalProperties": false,
+      "description": "HTTP request information"
     },
     "ctx": {
       "type": "object",
       "properties": {
-        "module": { "type": "string" },
-        "file": { "type": "string" },
-        "func": { "type": "string" },
-        "line": { "type": "integer", "minimum": 0 },
-        "model": { "type": "string" },
-        "keyMask": { "type": "string" }
+        "module": { 
+          "type": "string",
+          "description": "Module name"
+        },
+        "file": { 
+          "type": "string",
+          "description": "File name"
+        },
+        "func": { 
+          "type": "string",
+          "description": "Function name"
+        },
+        "line": { 
+          "type": "integer", 
+          "minimum": 0,
+          "description": "Line number"
+        },
+        "model": { 
+          "type": "string",
+          "description": "AI model name"
+        },
+        "keyMask": { 
+          "type": "string",
+          "description": "Key mask for sensitive data"
+        }
       },
-      "additionalProperties": false
+      "additionalProperties": false,
+      "description": "Context information"
     },
     "trace": {
       "type": "object",
       "properties": {
-        "traceId": { "type": "string" },
-        "spanId": { "type": "string" },
-        "parentId": { "type": "string" }
+        "traceId": { 
+          "type": "string",
+          "description": "Trace identifier"
+        },
+        "spanId": { 
+          "type": "string",
+          "description": "Span identifier"
+        },
+        "parentId": { 
+          "type": "string",
+          "description": "Parent span identifier"
+        }
       },
-      "additionalProperties": false
+      "additionalProperties": false,
+      "description": "Distributed tracing information"
     },
-    "stack": { "type": "string" },
-    "payload": { "type": ["object", "array", "string", "number", "boolean", "null"] }
+    "stack": { 
+      "type": "string",
+      "description": "Error stack trace"
+    },
+    "payload": { 
+      "type": ["object", "array", "string", "number", "boolean", "null"],
+      "description": "Additional payload data"
+    }
   },
   "required": ["ts", "level", "msg"],
-  "additionalProperties": true
+  "additionalProperties": false,
+  "description": "Schema for log entries in AI Debug Companion"
 }

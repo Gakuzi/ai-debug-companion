@@ -3,14 +3,14 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "",
+  "description": "JSON Schemas for AI Debug Companion",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node test.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": ["json-schema", "ai", "debug", "tupik"],
+  "author": "AI Debug Companion Team",
+  "license": "MIT",
   "devDependencies": {
     "ajv": "^8.17.1",
     "ajv-formats": "^3.0.1"
