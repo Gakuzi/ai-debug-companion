@@ -10,18 +10,25 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: analyzer
+    name: Deploy
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'npm'
-          cache-dependency-path: analyzer/package-lock.json
-      - run: npm ci
-      - run: npm run build
-      - run: npm run deploy
+          node-version: '18'
+          registry-url: 'https://registry.npmjs.org'
+      - name: Install dependencies
+        run: |
+          cd analyzer
+          npm ci
+      - name: Build
+        run: |
+          cd analyzer
+          npm run build
+      - name: Deploy
+        run: |
+          cd analyzer
+          npm run deploy
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

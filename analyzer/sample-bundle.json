@@ -1,0 +1,34 @@
+{
+  "logs": [
+    {
+      "level": "INFO",
+      "msg": "Application started successfully",
+      "ts": "2023-01-01T10:00:00.000Z"
+    },
+    {
+      "level": "WARN",
+      "msg": "High memory usage detected",
+      "ts": "2023-01-01T10:05:00.000Z"
+    },
+    {
+      "level": "ERROR",
+      "msg": "Database connection failed",
+      "ts": "2023-01-01T10:10:00.000Z"
+    },
+    {
+      "level": "INFO",
+      "msg": "Retrying database connection",
+      "ts": "2023-01-01T10:10:05.000Z"
+    },
+    {
+      "level": "FATAL",
+      "msg": "Application crashed due to unhandled exception",
+      "ts": "2023-01-01T10:10:10.000Z"
+    }
+  ],
+  "meta": {
+    "createdAt": "2023-01-01T10:15:00.000Z",
+    "filter": "ВСЁ",
+    "count": 5
+  }
+}
