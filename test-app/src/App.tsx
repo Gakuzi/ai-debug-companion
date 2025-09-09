@@ -22,7 +22,7 @@ function App() {
     initLogger({
       projectId: 'test-app',
       level: 'DEBUG',
-      collectorUrl: 'https://httpbin.org/post', // Test endpoint
+      collectorUrl: 'http://localhost:8787', // Updated to match collector base URL
       batchSize: 10,
       flushInterval: 2000,
       redact: 'maskSecrets'
@@ -88,7 +88,8 @@ function App() {
       logInfo('Тестируем HTTP запрос', { ctx: { module: 'App', func: 'testFetch' } })
       
       // This will be logged by wrapFetch
-      const response = await fetch('https://httpbin.org/json')
+      // Simulating a TypeError in fetch
+      const response = await fetch('invalid-url://test') // This will cause a TypeError
       const data = await response.json()
       
       logInfo('HTTP запрос успешен', {
@@ -130,7 +131,7 @@ function App() {
           </button>
           
           <button onClick={testFetch} style={{ backgroundColor: '#2563eb' }}>
-            Тест HTTP запроса
+            Тест HTTP запроса (с TypeError)
           </button>
           
           <button onClick={testSecretMasking} style={{ backgroundColor: '#7c3aed' }}>
@@ -141,6 +142,7 @@ function App() {
         <div className="info">
           <p>Откройте BlackBox внизу экрана для просмотра логов</p>
           <p>Попробуйте разные действия и посмотрите, как логируются события</p>
+          <p>Нажмите "Тест HTTP запроса (с TypeError)" для симуляции бага</p>
         </div>
       </header>
 

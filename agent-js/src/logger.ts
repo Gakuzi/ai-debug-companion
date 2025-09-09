@@ -94,7 +94,12 @@ async function flush(): Promise<void> {
   if (queue.length === 0) return
   const batch = queue.splice(0, configured.batchSize)
   try {
-    await fetch(configured.collectorUrl, {
+    // Ensure the URL ends with /ingest/logs for the correct endpoint
+    const endpointUrl = configured.collectorUrl.endsWith('/ingest/logs') 
+      ? configured.collectorUrl 
+      : configured.collectorUrl + (configured.collectorUrl.endsWith('/') ? 'ingest/logs' : '/ingest/logs')
+      
+    await fetch(endpointUrl, {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ projectId: configured.projectId, entries: batch }),
