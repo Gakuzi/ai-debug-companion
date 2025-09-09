@@ -1,9 +1,10 @@
 {
-  "name": "ai-debug-companion-agent",
+  "name": "@ai-debug-companion/agent-logger",
   "version": "1.0.0",
-  "description": "Agent for AI Debug Companion",
+  "description": "Agent Logger with Russian UI for AI Debug Companion",
   "type": "module",
-  "main": "src/index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
     "test": "echo 'No test script defined'"
@@ -11,14 +12,19 @@
   "keywords": [
     "ai",
     "debug",
+    "logger",
     "agent"
   ],
   "author": "Evgeny",
   "license": "MIT",
   "devDependencies": {
-    "typescript": "^5.0.0",
-    "@types/node": "^20.0.0",
-    "@types/react": "^18.0.0",
-    "@types/react-dom": "^18.0.0"
+    "@types/node": "^20.19.13",
+    "@types/react": "^18.3.24",
+    "@types/react-dom": "^18.3.7",
+    "typescript": "^5.9.2"
+  },
+  "peerDependencies": {
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0"
   }
 }
