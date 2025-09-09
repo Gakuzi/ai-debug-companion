@@ -1,0 +1,107 @@
+{
+  "$id": "https://github.com/Gakuzi/ai-debug-companion/schemas/logEntry.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Log Entry",
+  "description": "Schema for a log entry in the AI Debug Companion system",
+  "type": "object",
+  "required": ["ts", "level", "msg"],
+  "properties": {
+    "ts": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp of the log entry"
+    },
+    "level": {
+      "type": "string",
+      "enum": ["DEBUG", "INFO", "WARN", "ERROR", "FATAL"],
+      "description": "Log level"
+    },
+    "msg": {
+      "type": "string",
+      "description": "Log message"
+    },
+    "code": {
+      "type": "string",
+      "description": "Error code or identifier"
+    },
+    "http": {
+      "type": "object",
+      "properties": {
+        "method": {
+          "type": "string",
+          "description": "HTTP method"
+        },
+        "url": {
+          "type": "string",
+          "description": "Request URL"
+        },
+        "status": {
+          "type": "integer",
+          "description": "HTTP status code"
+        },
+        "latencyMs": {
+          "type": "integer",
+          "description": "Request latency in milliseconds"
+        }
+      },
+      "additionalProperties": false
+    },
+    "ctx": {
+      "type": "object",
+      "properties": {
+        "module": {
+          "type": "string",
+          "description": "Module name"
+        },
+        "file": {
+          "type": "string",
+          "description": "File name"
+        },
+        "func": {
+          "type": "string",
+          "description": "Function name"
+        },
+        "line": {
+          "type": "integer",
+          "description": "Line number"
+        },
+        "model": {
+          "type": "string",
+          "description": "AI model identifier"
+        },
+        "keyMask": {
+          "type": "string",
+          "description": "Masked key or identifier"
+        }
+      },
+      "additionalProperties": false
+    },
+    "trace": {
+      "type": "object",
+      "properties": {
+        "traceId": {
+          "type": "string",
+          "description": "Trace identifier"
+        },
+        "spanId": {
+          "type": "string",
+          "description": "Span identifier"
+        },
+        "parentId": {
+          "type": "string",
+          "description": "Parent span identifier"
+        }
+      },
+      "additionalProperties": false
+    },
+    "stack": {
+      "type": "string",
+      "description": "Stack trace"
+    },
+    "payload": {
+      "type": ["object", "array", "string", "number", "boolean", "null"],
+      "description": "Additional payload data"
+    }
+  },
+  "additionalProperties": false
+}
