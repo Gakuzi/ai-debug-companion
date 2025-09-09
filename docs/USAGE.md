@@ -39,12 +39,32 @@ function App() {
 1. Откройте Analyzer по ссылке: https://gakuzi.github.io/ai-debug-companion
 2. Перейдите в раздел "Анализ Тупиков"
 3. Опишите ситуацию, в которой ваше приложение зашло в тупик
+4. Получите промт с пояснением, который можно использовать в ИИ-ассистенте
 
-### Пример
+### Пример промта с пояснением
 
-Опишите: "Застрял в функции X при обработке данных пользователя"
+После описания тупика вы получите промт следующего вида:
 
-Получите промт с пояснением, который можно использовать в ИИ-ассистенте для получения рекомендаций по разрешению ситуации.
+```
+// Пояснение на русском: Промт для Grok исправляет ошибки
+Analyze the following deadlock/tupik situation and provide assistance to resolve it.
+
+Classification: deadlock
+Tupik Data:
+{
+  "description": "Застрял в функции обработки данных пользователя",
+  "context": "Multi-step AI reasoning process",
+  "error": "Timeout after 30 seconds"
+}
+
+Please provide:
+1. Explanation of the deadlock situation
+2. Root cause analysis
+3. Instructions to resolve the deadlock
+4. Prevention recommendations
+```
+
+Этот промт можно использовать в ИИ-ассистенте (например, Grok) для получения рекомендаций по разрешению ситуации.
 
 ## Работа с логами
 

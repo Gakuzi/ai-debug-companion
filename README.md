@@ -305,6 +305,15 @@ The repository includes GitHub Actions workflows for automated deployment:
 - **Analyzer Deployment**: Automatically builds and deploys the Analyzer to GitHub Pages on pushes to main
 - **Collector Deployment**: Deploys the Collector to Cloudflare Workers when collector code changes
 
+## Testing
+
+### End-to-End Testing
+
+The system has been tested end-to-end in September 2025. To test the system:
+
+1. Open [https://gakuzi.github.io/ai-debug-companion](https://gakuzi.github.io/ai-debug-companion)
+2. Follow the instructions in the UI to integrate the agent, simulate errors, and analyze results
+
 ## Contributing
 
 We welcome contributions to AI Debug Companion! Here's how you can help:

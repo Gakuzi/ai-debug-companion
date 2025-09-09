@@ -12,11 +12,17 @@ Analyzer автоматически деплоится через GitHub Actions
 
 ### Процесс деплоя
 
-При каждом пуше в ветку `main`:
-1. GitHub Actions запускает workflow
-2. Устанавливаются зависимости с помощью `npm ci`
-3. Собирается проект с помощью `npm run build`
-4. Деплоится на GitHub Pages с помощью `npm run deploy`
+GitHub Actions workflow для Analyzer находится в файле `.github/workflows/deploy-analyzer.yml` и выполняет следующие шаги:
+
+1. Установка Node.js окружения
+2. Установка зависимостей с помощью `npm ci`
+3. Сборка проекта с помощью `npm run build`
+4. Деплой на GitHub Pages с помощью `npm run deploy`
+
+### Секреты для деплоя
+
+Для деплоя Analyzer требуется:
+- `GITHUB_TOKEN` - автоматически предоставляется GitHub Actions
 
 ## Collector
 
@@ -24,29 +30,26 @@ Collector деплоится на Cloudflare Workers через GitHub Actions.
 
 ### Требования
 
-- Аккаунт Cloudflare
+- Аккаунт Cloudflare с включёнными Workers и R2
 - API токен с правами на деплой Workers и R2
 
-### Настройка секретов
+### Процесс деплоя
+
+GitHub Actions workflow для Collector находится в файле `.github/workflows/deploy-collector.yml` и использует `cloudflare/wrangler-action@v3` для деплоя.
+
+### Секреты для деплоя
 
 Для деплоя Collector необходимо добавить следующие секреты в GitHub Actions:
 
 - `CLOUDFLARE_API_TOKEN` - API токен Cloudflare
 - `GEMINI_API_KEY` - API ключ для Gemini (если используется анализ логов)
 
-### Процесс деплоя
-
-При каждом пуше в ветку `main` с изменениями в директории `collector`:
-1. GitHub Actions запускает workflow
-2. Устанавливаются зависимости
-3. Деплоится на Cloudflare Workers с помощью wrangler-action
-
 ## Agent
 
 Agent публикуется как npm пакет. Для публикации новой версии:
 
 ```bash
-cd agent-js
+cd agent
 npm publish
 ```
 
@@ -56,8 +59,8 @@ npm publish
 
 ```env
 PROJECT_ID=test
-COLLECTOR_URL=https://your-collector.your-subdomain.workers.dev
-GEMINI_KEY=your-gemini-api-key
+COLLECTOR_URL=[Collector URL]
+GEMINI_KEY=***
 ```
 
 ## Мониторинг
