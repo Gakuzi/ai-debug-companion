@@ -1,77 +1,27 @@
 {
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/Gakuzi/ai-debug-companion/schemas/tupikRequest.schema.json",
-  "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Tupik Request",
-  "description": "Schema for a tupik (deadlock) request in the AI Debug Companion system",
+  "title": "TupikRequest",
   "type": "object",
-  "required": ["description", "projectContext"],
   "properties": {
-    "description": {
-      "type": "string",
-      "description": "Description of the tupik situation"
-    },
+    "description": { "type": "string", "minLength": 1 },
     "projectContext": {
       "type": "object",
-      "required": ["files", "deps"],
       "properties": {
         "files": {
           "type": "array",
-          "items": {
-            "type": "object",
-            "required": ["path", "content"],
-            "properties": {
-              "path": {
-                "type": "string",
-                "description": "File path"
-              },
-              "content": {
-                "type": "string",
-                "description": "File content"
-              }
-            },
-            "additionalProperties": false
-          },
-          "description": "Relevant files in the project"
+          "items": { "type": "string", "minLength": 1 }
         },
         "deps": {
           "type": "array",
-          "items": {
-            "type": "object",
-            "required": ["name", "version"],
-            "properties": {
-              "name": {
-                "type": "string",
-                "description": "Dependency name"
-              },
-              "version": {
-                "type": "string",
-                "description": "Dependency version"
-              }
-            },
-            "additionalProperties": false
-          },
-          "description": "Project dependencies"
+          "items": { "type": "string", "minLength": 1 }
         }
       },
+      "required": ["files", "deps"],
       "additionalProperties": false
     },
-    "collectedData": {
-      "type": "object",
-      "description": "Collected debugging data",
-      "properties": {
-        "logs": {
-          "type": "array",
-          "items": {
-            "$ref": "https://github.com/Gakuzi/ai-debug-companion/schemas/logEntry.schema.json"
-          }
-        },
-        "metrics": {
-          "type": "object",
-          "description": "Performance metrics"
-        }
-      },
-      "additionalProperties": false
-    }
+    "collectedData": { "type": ["object", "array", "null"] }
   },
+  "required": ["description", "projectContext"],
   "additionalProperties": false
 }

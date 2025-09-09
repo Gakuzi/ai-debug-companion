@@ -1,18 +1,15 @@
 {
   "name": "ai-debug-companion",
   "version": "1.0.0",
-  "description": "AI Debug Companion: AI-Powered Debugging Tool",
+  "private": false,
   "type": "module",
-  "scripts": {
-    "build": "echo 'No build script defined'",
-    "test": "echo 'No test script defined'"
-  },
-  "keywords": [
-    "ai",
-    "debug",
-    "tupik",
-    "buster"
+  "workspaces": [
+    "agent-js",
+    "collector",
+    "analyzer",
+    "schemas"
   ],
-  "author": "Evgeny",
-  "license": "MIT"
+  "scripts": {
+    "postinstall": "echo monorepo ready"
+  }
 }
