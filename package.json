@@ -2,6 +2,28 @@
   "name": "ai-debug-companion",
   "version": "1.0.0",
   "private": false,
+  "description": "AI Debug Companion - Advanced debugging tool for LLM applications with deadlock detection and AI-powered root cause analysis",
+  "keywords": [
+    "ai",
+    "debugging",
+    "llm",
+    "logging",
+    "deadlock",
+    "tupik",
+    "gemini",
+    "react",
+    "typescript"
+  ],
+  "homepage": "https://github.com/Gakuzi/ai-debug-companion#readme",
+  "bugs": {
+    "url": "https://github.com/Gakuzi/ai-debug-companion/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Gakuzi/ai-debug-companion.git"
+  },
+  "license": "MIT",
+  "author": "AI Debug Companion Team",
   "type": "module",
   "workspaces": [
     "agent-js",
