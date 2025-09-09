@@ -49,6 +49,7 @@ function App() {
         const parsedData = JSON.parse(content);
         setLogs(parsedData.logs || []);
         setSnapshot(parsedData);
+        setSummary(''); // Clear previous summary
         alert('Бандл загружен!');
       } catch (error) {
         alert('Ошибка при загрузке бандла: ' + (error as Error).message);
@@ -289,6 +290,15 @@ initLogger({
                 >
                   Анализировать проект
                 </button>
+                
+                {summary && (
+                  <div className="mt-6">
+                    <h3 className="text-xl font-semibold text-gray-800 mb-2">Результаты анализа</h3>
+                    <pre className="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm">
+                      {summary}
+                    </pre>
+                  </div>
+                )}
               </div>
             )}
           </section>
