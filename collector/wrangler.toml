@@ -7,5 +7,5 @@ binding = "STORAGE"
 bucket_name = "ai-debug-storage"
 
 [vars]
-PROJECT_TOKENS = '{"test-app": "secret"}'
+PROJECT_TOKENS = '{"test": "secret"}'
 GEMINI_API_KEY = "your-gemini-api-key"
