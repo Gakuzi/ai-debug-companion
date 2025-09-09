@@ -1,0 +1,24 @@
+{
+  "name": "ai-debug-companion-agent",
+  "version": "1.0.0",
+  "description": "Agent for AI Debug Companion",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "echo 'No test script defined'"
+  },
+  "keywords": [
+    "ai",
+    "debug",
+    "agent"
+  ],
+  "author": "Evgeny",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "@types/node": "^20.0.0",
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0"
+  }
+}

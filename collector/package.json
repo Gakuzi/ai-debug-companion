@@ -1,0 +1,21 @@
+{
+  "name": "ai-debug-companion-collector",
+  "version": "1.0.0",
+  "description": "Collector for AI Debug Companion",
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy"
+  },
+  "keywords": [
+    "ai",
+    "debug",
+    "collector",
+    "cloudflare"
+  ],
+  "author": "Evgeny",
+  "license": "MIT",
+  "devDependencies": {
+    "wrangler": "^3.0.0"
+  }
+}
