@@ -1,37 +1,23 @@
 {
   "name": "ai-debug-companion",
   "version": "1.0.0",
-  "private": false,
-  "description": "AI Debug Companion - Advanced debugging tool for LLM applications with deadlock detection and AI-powered root cause analysis",
-  "keywords": [
-    "ai",
-    "debugging",
-    "llm",
-    "logging",
-    "deadlock",
-    "tupik",
-    "gemini",
-    "react",
-    "typescript"
-  ],
-  "homepage": "https://github.com/Gakuzi/ai-debug-companion#readme",
-  "bugs": {
-    "url": "https://github.com/Gakuzi/ai-debug-companion/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Gakuzi/ai-debug-companion.git"
-  },
-  "license": "MIT",
-  "author": "AI Debug Companion Team",
   "type": "module",
+  "private": true,
   "workspaces": [
-    "agent-js",
+    "agent",
     "collector",
     "analyzer",
     "schemas"
   ],
   "scripts": {
-    "postinstall": "echo monorepo ready"
+    "postinstall": "echo AI Debug Companion ready",
+    "dev": "concurrently \"npm run dev:analyzer\" \"npm run dev:collector\"",
+    "dev:analyzer": "npm run dev -w analyzer",
+    "dev:collector": "npm run dev -w collector",
+    "build": "npm run build -w analyzer",
+    "deploy": "npm run deploy -w analyzer"
+  },
+  "devDependencies": {
+    "concurrently": "^8.0.0"
   }
 }

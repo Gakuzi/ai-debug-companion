@@ -1,7 +1,0 @@
-{
-  "description": "Застрял в fetch, TypeError",
-  "error": "TypeError: Failed to fetch",
-  "url": "invalid-url://test",
-  "instructionPrompt": "Analyze the following deadlock/tupik situation and provide assistance to resolve it.\n\nClassification: general\nTupik Data:\n{\n  \"description\": \"Застрял в fetch, TypeError\",\n  \"error\": \"TypeError: Failed to fetch\",\n  \"url\": \"invalid-url://test\"\n}\n\nPlease provide:\n1. Explanation of the deadlock situation\n2. Root cause analysis\n3. Instructions to resolve the deadlock\n4. Prevention recommendations",
-  "timestamp": "2025-09-09T19:53:46.374Z"
-}
