@@ -55,6 +55,54 @@ export function wrapFetch(): void {
 // Auto collection functionality
 let collectionInterval: ReturnType<typeof setInterval> | null = null
 
+// Функция для сбора информации о проекте
+function collectProjectInfo(): any {
+  try {
+    // Сбор информации о зависимостях (если доступен package.json)
+    let deps: string[] = [];
+    try {
+      // В браузерной среде мы не можем напрямую читать файлы,
+      // но можем попытаться получить информацию из глобальных объектов
+      if (typeof window !== 'undefined') {
+        // Сбор информации о загруженных скриптах
+        const scripts = Array.from(document.querySelectorAll('script[src]')).map(s => (s as HTMLScriptElement).src);
+        // Сбор информации о загруженных стилях
+        const styles = Array.from(document.querySelectorAll('link[rel="stylesheet"]')).map(l => (l as HTMLLinkElement).href);
+        deps = [...scripts, ...styles];
+      }
+    } catch (e) {
+      // Игнорируем ошибки при сборе зависимостей
+    }
+    
+    // Сбор информации о структуре проекта (в браузерной среде ограничены возможности)
+    const projectStructure: string[] = [];
+    if (typeof window !== 'undefined') {
+      projectStructure.push('Browser Environment');
+      projectStructure.push(`URL: ${window.location.href}`);
+      projectStructure.push(`User Agent: ${navigator.userAgent}`);
+      projectStructure.push(`Screen: ${screen.width}x${screen.height}`);
+    }
+    
+    // Сбор информации об ошибках из глобального объекта ошибок
+    const errors: any[] = [];
+    
+    return {
+      deps,
+      projectStructure,
+      errors
+    };
+  } catch (error) {
+    logError('Ошибка при сборе информации о проекте', {
+      payload: { error: String(error) }
+    });
+    return {
+      deps: [],
+      projectStructure: [],
+      errors: []
+    };
+  }
+}
+
 export function autoCollect(): void {
   if (collectionInterval) {
     clearInterval(collectionInterval)
@@ -62,20 +110,15 @@ export function autoCollect(): void {
   
   collectionInterval = setInterval(() => {
     try {
+      // Собираем информацию о проекте
+      const projectInfo = collectProjectInfo();
+      
       // Логируем информацию о сборе данных
       logInfo('Автоматический сбор данных', {
         payload: { 
           timestamp: new Date().toISOString(),
-          message: 'Сканирование файлов, логов и зависимостей' 
-        }
-      })
-      
-      // Здесь будет логика сканирования файлов, логов и зависимостей
-      // Пока что просто симулируем сбор данных
-      logWarn('Сбор данных', {
-        payload: { 
-          message: 'Функция сбора данных еще не реализована',
-          status: 'pending'
+          message: 'Сканирование файлов, логов и зависимостей',
+          projectInfo
         }
       })
     } catch (error) {

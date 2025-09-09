@@ -27,32 +27,70 @@ function classifyTupik(data: any): string {
 // Helper function to build prompt for Gemini
 function buildPrompt(logs: any[], classification: string): string {
   // Пояснение на русском: Промт для Gemini: анализ логов, план фикса (RCA/FIX/CONFIG).
-  return `Analyze the following logs and provide a detailed analysis with root cause analysis (RCA), fix suggestions, and configuration recommendations.
-  
+  return `You are an expert software debugging assistant. Analyze the following application logs and provide a detailed analysis with actionable recommendations.
+
 Classification: ${classification}
 Logs:
 ${JSON.stringify(logs, null, 2)}
 
-Please provide:
+Please provide your response in the following structured format:
+
 1. Root Cause Analysis (RCA)
+   - Identify the primary issue based on the logs
+   - Explain the sequence of events that led to the problem
+   - Highlight any patterns or recurring issues
+
 2. Fix Suggestions
-3. Configuration Recommendations`;
+   - Provide specific code fixes or changes needed
+   - Include examples or code snippets where applicable
+   - Prioritize fixes by impact and urgency
+
+3. Configuration Recommendations
+   - Suggest configuration changes to prevent similar issues
+   - Recommend monitoring or alerting improvements
+   - Propose architectural improvements if relevant
+
+4. Prevention Strategies
+   - Best practices to avoid similar issues in the future
+   - Testing recommendations
+   - Code quality improvements
+
+Please be concise but thorough in your analysis.`;
 }
 
 // Helper function to build tupik prompt for Gemini
 function buildTupikPrompt(tupikData: any, classification: string): string {
   // Пояснение на русском: Промт анализирует тупик, находит ошибку вне фокуса, генерирует инструкции.
-  return `Analyze the following deadlock/tupik situation and provide assistance to resolve it.
-  
+  return `You are an expert software debugging assistant specializing in resolving deadlock and complex problem situations. 
+Analyze the following deadlock/tupik situation and provide comprehensive assistance to resolve it.
+
 Classification: ${classification}
 Tupik Data:
 ${JSON.stringify(tupikData, null, 2)}
 
-Please provide:
+Please provide your response in the following structured format:
+
 1. Explanation of the deadlock situation
+   - Clearly describe what type of deadlock or problematic situation this is
+   - Explain why it's difficult to resolve with conventional approaches
+   - Identify the core components involved
+
 2. Root cause analysis
+   - Dig deep to identify the fundamental cause of the issue
+   - Look beyond the obvious symptoms to find hidden factors
+   - Consider systemic or architectural causes
+
 3. Instructions to resolve the deadlock
-4. Prevention recommendations`;
+   - Provide step-by-step instructions to resolve the issue
+   - Include specific commands, code changes, or configuration updates
+   - Address both immediate fixes and long-term solutions
+
+4. Prevention recommendations
+   - Suggest measures to prevent similar situations in the future
+   - Recommend process or architectural improvements
+   - Propose monitoring or alerting to catch early signs
+
+Please be thorough and provide actionable guidance that a developer can follow to resolve this complex situation.`;
 }
 
 // Helper function to fetch from Gemini API
@@ -163,7 +201,7 @@ export default {
         // Instead we're returning the prompt for the AI assistant
         
         return new Response(JSON.stringify({
-          explanation: "Этот промт для ИИ-ассистента: вставьте в Grok!",
+          explanation: "Пояснение на русском: Этот промт для Grok/ChatGPT исправляет сложные ошибки вне фокуса разработчика",
           instructionPrompt: prompt
         }), {
           headers: { 'Content-Type': 'application/json' },

@@ -6,13 +6,15 @@
   "description": "JSON Schemas for AI Debug Companion",
   "main": "index.js",
   "scripts": {
-    "test": "node test.js"
+    "test": "node test.js",
+    "validate": "npx tsx validate.ts"
   },
   "keywords": ["json-schema", "ai", "debug", "tupik"],
   "author": "AI Debug Companion Team",
   "license": "MIT",
   "devDependencies": {
     "ajv": "^8.17.1",
-    "ajv-formats": "^3.0.1"
+    "ajv-formats": "^3.0.1",
+    "tsx": "^4.7.1"
   }
 }

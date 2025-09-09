@@ -1,167 +1,154 @@
-# AI Debug Companion: Advanced AI Debugging Tool for LLM Applications
+# AI Debug Companion: Единое веб-приложение для анализа и исправления ошибок в разработке с помощью ИИ
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![GitHub Stars](https://img.shields.io/github/stars/gakuzi/ai-debug-companion)](https://github.com/gakuzi/ai-debug-companion/stargazers)
 [![GitHub Issues](https://img.shields.io/github/issues/gakuzi/ai-debug-companion)](https://github.com/gakuzi/ai-debug-companion/issues)
 
-**AI Debug Companion** is a powerful AI debugging tool designed specifically for LLM (Large Language Model) applications. This comprehensive solution combines intelligent logging, deadlock detection, and AI-powered root cause analysis to help developers quickly identify and resolve complex issues in their AI applications.
+**AI Debug Companion** - это мощный инструмент для отладки приложений с использованием искусственного интеллекта. Это единое веб-приложение объединяет интеллектуальное логирование, обнаружение тупиковых ситуаций и анализ корневых причин с помощью ИИ, помогая разработчикам быстро выявлять и устранять сложные проблемы в их приложениях.
 
-With its unique **Tupik Buster** feature, AI Debug Companion specializes in unlocking deadlock situations that commonly occur in multi-step AI reasoning processes, making it an essential tool for any team working with generative AI systems.
+С уникальной функцией **Tupik Buster** AI Debug Companion специализируется на разблокировке тупиковых ситуаций, которые часто возникают в многошаговых процессах рассуждения ИИ, делая его незаменимым инструментом для любой команды, работающей с генеративными ИИ-системами.
 
-## Why AI Debug Companion?
+## Почему AI Debug Companion?
 
-Traditional debugging tools fall short when it comes to understanding the complex behavior of AI applications. AI Debug Companion bridges this gap by providing:
+Традиционные инструменты отладки не справляются с пониманием сложного поведения ИИ-приложений. AI Debug Companion заполняет этот пробел, предоставляя:
 
-- **AI-Powered Insights**: Leverages Gemini integration for intelligent error analysis and root cause identification
-- **Deadlock Detection**: Specialized Tupik Buster module identifies and resolves stuck AI reasoning processes
-- **Comprehensive Logging**: Multi-level logging with automatic secret redaction for security
-- **Real-time Visualization**: Web-based analyzer for instant insight into application behavior
-- **Seamless Integration**: Easy integration with React applications and Node.js backends
+- **Анализ с помощью ИИ**: Интеграция с Gemini для интеллектуального анализа ошибок и выявления корневых причин
+- **Обнаружение тупиков**: Специализированный модуль Tupik Buster для обнаружения и устранения зависаний ИИ-процессов
+- **Комплексное логирование**: Многоуровневое логирование с автоматическим скрытием секретов для безопасности
+- **Визуализация в реальном времени**: Веб-анализатор с мгновенным пониманием поведения приложения
+- **Простая интеграция**: Легкая интеграция с React-приложениями и Node.js бэкендами
 
-## Key Features
+## Основные функции
 
-### 🔍 Intelligent Logging & Secret Protection
-- Multi-level logging (DEBUG, INFO, WARN, ERROR, FATAL)
-- Automatic secret redaction for API keys, tokens, and passwords
-- Batch sending to optimize network usage
-- TypeScript support with strict typing
+### 🔍 Интеллектуальное логирование и защита секретов
+- Многоуровневое логирование (DEBUG, INFO, WARN, ERROR, FATAL)
+- Автоматическое скрытие секретов для API-ключей, токенов и паролей
+- Пакетная отправка для оптимизации использования сети
+- Поддержка TypeScript со строгой типизацией
 
-### 🚀 Tupik Buster - Deadlock Resolution
-- Specialized detection of AI reasoning deadlocks
-- Automated deadlock reporting and analysis
-- Context-aware deadlock resolution suggestions
-- Integration with popular AI frameworks
+### 🚀 Tupik Buster - Разрешение тупиков
+- Специализированное обнаружение тупиков в ИИ-рассуждениях
+- Автоматическая отчетность о тупиковых ситуациях
+- Предложения по разрешению тупиков с учетом контекста
+- Интеграция с популярными ИИ-фреймворками
 
-### 🧠 AI-Powered Root Cause Analysis
-- Gemini API integration for intelligent error analysis
-- Automated Root Cause Analysis (RCA) generation
-- Actionable fix recommendations
-- Prevention strategies for future issues
+### 🧠 Анализ корневых причин с помощью ИИ
+- Интеграция с API Gemini для интеллектуального анализа ошибок
+- Автоматическая генерация анализа корневых причин (RCA)
+- Практические рекомендации по исправлению
+- Стратегии предотвращения будущих проблем
 
-### 🌐 Real-time Visualization & Collaboration
-- Web-based analyzer with Russian and English UI
-- Interactive log exploration with filtering and search
-- Team collaboration through shared analysis links
-- Exportable reports for documentation
+### 🌐 Визуализация в реальном времени и совместная работа
+- Веб-анализатор с русским и английским интерфейсом
+- Интерактивное изучение логов с фильтрацией и поиском
+- Совместная работа команды через общие ссылки анализа
+- Экспортируемые отчеты для документации
 
-## Quick Start
+## Быстрый старт
 
-Getting started with AI Debug Companion is simple:
+Начать работу с AI Debug Companion просто:
 
-1. **Install the Agent Logger**:
+1. **Установите Agent Logger**:
    ```bash
    npm install ai-debug-companion-agent
    ```
 
-2. **Initialize in your application**:
+2. **Инициализируйте в вашем приложении**:
    ```typescript
-   import { initLogger, installGlobalErrorHandlers, wrapFetch } from 'ai-debug-companion-agent';
+   import { initAgent } from 'ai-debug-companion-agent';
    
-   // Initialize the logger
-   initLogger({
-     projectId: 'your-project-id',
-     level: 'DEBUG',
-     collectorUrl: 'https://your-collector-endpoint.com',
-     batchSize: 50,
-     flushInterval: 3000,
-     redact: 'maskSecrets'
-   });
-   
-   // Install global error handlers
-   installGlobalErrorHandlers();
-   
-   // Wrap fetch for HTTP logging
-   wrapFetch();
+   // Инициализация агента
+   initAgent('your-project-id', 'https://your-collector-endpoint.com');
    ```
 
-3. **Add the BlackBox Component** (for React applications):
+3. **Добавьте компонент BlackBox** (для React-приложений):
    ```tsx
    import { BlackBox } from 'ai-debug-companion-agent';
    
    function App() {
      return (
        <div>
-         {/* Your app content */}
+         {/* Содержимое вашего приложения */}
          <BlackBox height={300} />
        </div>
      );
    }
    ```
 
-4. **Access the Analyzer**:
-   Visit [https://gakuzi.github.io/ai-debug-companion](https://gakuzi.github.io/ai-debug-companion) to view and analyze your application logs.
+4. **Откройте Analyzer**:
+   Посетите [https://gakuzi.github.io/ai-debug-companion](https://gakuzi.github.io/ai-debug-companion) для просмотра и анализа логов вашего приложения.
 
-## Architecture
+## Архитектура
 
-AI Debug Companion follows a modular, microservices-inspired architecture designed for scalability and flexibility:
+AI Debug Companion следует модульной архитектуре, вдохновленной микросервисами, разработанной для масштабируемости и гибкости:
 
 ### 1. Agent-Logger
-The lightweight agent that instruments your application:
-- Captures runtime events, errors, and performance metrics
-- Provides multi-level logging with automatic secret redaction
-- Includes Tupik Buster for deadlock detection
-- Available as npm package for easy integration
+Легковесный агент, который инструментирует ваше приложение:
+- Захватывает события выполнения, ошибки и метрики производительности
+- Обеспечивает многоуровневое логирование с автоматическим скрытием секретов
+- Включает Tupik Buster для обнаружения тупиков
+- Доступен как npm-пакет для легкой интеграции
 
 ### 2. Collector
-Centralized log collection and processing service:
-- Normalizes and validates incoming log data
-- Routes logs to appropriate storage backends
-- Optimized for edge deployment (Cloudflare Workers)
-- Configurable through Wrangler
+Централизованный сервис сбора и обработки логов:
+- Нормализует и проверяет входящие данные логов
+- Направляет логи в соответствующие хранилища
+- Оптимизирован для развертывания на краю (Cloudflare Workers)
+- Настраивается через Wrangler
 
 ### 3. Analyzer
-Web-based visualization and analysis platform:
-- Interactive dashboard for log exploration
-- AI-powered root cause analysis
-- Deadlock situation visualization
-- Collaborative features for team debugging
+Веб-платформа визуализации и анализа:
+- Интерактивная панель для изучения логов
+- Анализ корневых причин с помощью ИИ
+- Визуализация тупиковых ситуаций
+- Совместные функции для отладки командой
 
 ### 4. Schemas
-Shared type definitions ensuring consistency:
-- Standardized log entry formats
-- Tupik request/response schemas
-- API contracts between components
+Общие определения типов для обеспечения согласованности:
+- Стандартизированные форматы записей логов
+- Схемы запросов/ответов Tupik
+- Контракты API между компонентами
 
-## Installation
+## Установка
 
-### Prerequisites
+### Предварительные требования
 - Node.js 16+
-- npm or yarn
-- TypeScript 4.5+ (for development)
+- npm или yarn
+- TypeScript 4.5+ (для разработки)
 
-### Agent Installation
+### Установка Agent
 ```bash
 npm install ai-debug-companion-agent
 ```
 
-### Collector Setup
-1. Clone the repository:
+### Настройка Collector
+1. Клонируйте репозиторий:
    ```bash
    git clone https://github.com/gakuzi/ai-debug-companion.git
    cd ai-debug-companion/collector
    ```
 
-2. Configure environment variables:
+2. Настройте переменные окружения:
    ```bash
    cp wrangler.toml.example wrangler.toml
-   # Edit wrangler.toml with your configuration
+   # Отредактируйте wrangler.toml с вашей конфигурацией
    ```
 
-3. Deploy to Cloudflare Workers:
+3. Разверните на Cloudflare Workers:
    ```bash
    npm install
    npx wrangler deploy
    ```
 
-## Usage Guide
+## Руководство по использованию
 
-### Integrating with React Applications
+### Интеграция с React-приложениями
 
-1. **Basic Setup**:
+1. **Базовая настройка**:
    ```typescript
    import { useEffect } from 'react';
    import { 
-     initLogger, 
+     initAgent,
      installGlobalErrorHandlers, 
      wrapFetch,
      logInfo
@@ -169,26 +156,21 @@ npm install ai-debug-companion-agent
    
    function App() {
      useEffect(() => {
-       initLogger({
-         projectId: 'my-react-app',
-         level: 'DEBUG',
-         collectorUrl: 'https://your-collector.com',
-         redact: 'maskSecrets'
-       });
+       initAgent('my-react-app', 'https://your-collector.com');
        
        installGlobalErrorHandlers();
        wrapFetch();
        
-       logInfo('Application initialized', {
+       logInfo('Приложение инициализировано', {
          ctx: { module: 'App', func: 'useEffect' }
        });
      }, []);
      
-     // Your component logic
+     // Логика вашего компонента
    }
    ```
 
-2. **Using the BlackBox Component**:
+2. **Использование компонента BlackBox**:
    ```tsx
    import { useState } from 'react';
    import { BlackBox } from 'ai-debug-companion-agent';
@@ -200,11 +182,11 @@ npm install ai-debug-companion-agent
        <div>
          <header>
            <button onClick={() => setIsBlackBoxOpen(!isBlackBoxOpen)}>
-             Toggle Debug Console
+             Переключить консоль отладки
            </button>
          </header>
          
-         {/* Your app content */}
+         {/* Содержимое вашего приложения */}
          
          <BlackBox 
            isOpen={isBlackBoxOpen}
@@ -216,53 +198,53 @@ npm install ai-debug-companion-agent
    }
    ```
 
-### Analyzing Deadlock Situations
+### Анализ тупиковых ситуаций
 
-1. **Enable Tupik Mode**:
+1. **Включение режима Tupik**:
    ```typescript
    import { initTupikMode, reportTupik } from 'ai-debug-companion-agent';
    
-   // Initialize Tupik mode with your API key
+   // Инициализация режима Tupik с вашим API-ключом
    initTupikMode('your-tupik-api-key');
    
-   // Report a deadlock situation
-   reportTupik('Application stuck in reasoning loop', {
-     context: 'Multi-step AI reasoning process',
-     error: 'Timeout after 30 seconds',
+   // Сообщение о тупиковой ситуации
+   reportTupik('Приложение застряло в цикле рассуждений', {
+     context: 'Многошаговый процесс ИИ-рассуждений',
+     error: 'Таймаут через 30 секунд',
      function: 'reasoningChain'
    });
    ```
 
-2. **Using the Analyzer**:
-   - Open the Analyzer at [https://gakuzi.github.io/ai-debug-companion](https://gakuzi.github.io/ai-debug-companion)
-   - Navigate to the "Tupik Analysis" section
-   - Upload your deadlock bundle or select from recent reports
-   - Review the AI-generated analysis and recommendations
+2. **Использование Analyzer**:
+   - Откройте Analyzer по адресу [https://gakuzi.github.io/ai-debug-companion](https://gakuzi.github.io/ai-debug-companion)
+   - Перейдите в раздел "Анализ Тупиков"
+   - Загрузите ваш тупиковый бандл или выберите из последних отчетов
+   - Изучите сгенерированный ИИ анализ и рекомендации
 
-### Secret Redaction
+### Скрытие секретов
 
-The agent automatically masks sensitive information in logs:
+Агент автоматически маскирует конфиденциальную информацию в логах:
 
 ```typescript
 import { logInfo } from 'ai-debug-companion-agent';
 
-logInfo('API request', {
+logInfo('Запрос API', {
   payload: {
-    api_key: 'secret-api-key-12345',     // Will be masked as ***
-    token: 'bearer-token-abc123',        // Will be masked as ***
-    password: 'super-secret-password',   // Will be masked as ***
-    normalData: 'this will not be masked'
+    api_key: 'secret-api-key-12345',     // Будет замаскирован как ***
+    token: 'bearer-token-abc123',        // Будет замаскирован как ***
+    password: 'super-secret-password',   // Будет замаскирован как ***
+    normalData: 'это не будет замаскировано'
   }
 });
 ```
 
-## Deployment
+## Деплой
 
-### Collector Deployment
+### Деплой Collector
 
-AI Debug Companion's collector is optimized for edge deployment using Cloudflare Workers:
+Collector AI Debug Companion оптимизирован для развертывания на краю с использованием Cloudflare Workers:
 
-1. **Configure wrangler.toml**:
+1. **Настройка wrangler.toml**:
    ```toml
    name = "ai-debug-collector"
    main = "src/worker.ts"
@@ -277,69 +259,69 @@ AI Debug Companion's collector is optimized for edge deployment using Cloudflare
    GEMINI_API_KEY = "your-gemini-api-key"
    ```
 
-2. **Deploy with Wrangler**:
+2. **Деплой с Wrangler**:
    ```bash
    cd collector
    npx wrangler deploy
    ```
 
-### Analyzer Deployment
+### Деплой Analyzer
 
-The Analyzer is built with Vite and React, making it easy to deploy:
+Analyzer построен с использованием Vite и React, что делает его легким для развертывания:
 
-1. **Build the Analyzer**:
+1. **Сборка Analyzer**:
    ```bash
    cd analyzer
    npm run build
    ```
 
-2. **Deploy to GitHub Pages**:
+2. **Деплой на GitHub Pages**:
    ```bash
    npm run deploy
    ```
 
-### GitHub Actions Automation
+### Автоматизация GitHub Actions
 
-The repository includes GitHub Actions workflows for automated deployment:
+Репозиторий включает рабочие процессы GitHub Actions для автоматического развертывания:
 
-- **Analyzer Deployment**: Automatically builds and deploys the Analyzer to GitHub Pages on pushes to main
-- **Collector Deployment**: Deploys the Collector to Cloudflare Workers when collector code changes
+- **Деплой Analyzer**: Автоматически собирает и развертывает Analyzer на GitHub Pages при пуше в main
+- **Деплой Collector**: Развертывает Collector на Cloudflare Workers при изменении кода collector
 
-## Testing
+## Тестирование
 
-### End-to-End Testing
+### End-to-End тестирование
 
-The system has been tested end-to-end in September 2025. To test the system:
+Система была протестирована полностью в сентябре 2025. Чтобы протестировать систему:
 
-1. Open [https://gakuzi.github.io/ai-debug-companion](https://gakuzi.github.io/ai-debug-companion)
-2. Follow the instructions in the UI to integrate the agent, simulate errors, and analyze results
+1. Откройте [https://gakuzi.github.io/ai-debug-companion](https://gakuzi.github.io/ai-debug-companion)
+2. Следуйте инструкциям в UI для интеграции агента, симуляции ошибок и анализа результатов
 
-## Contributing
+## Вклад в проект
 
-We welcome contributions to AI Debug Companion! Here's how you can help:
+Мы приветствуем вклад в AI Debug Companion! Вот как вы можете помочь:
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+1. Сделайте форк репозитория
+2. Создайте ветку с функцией (`git checkout -b feature/AmazingFeature`)
+3. Зафиксируйте изменения (`git commit -m 'Добавить AmazingFeature'`)
+4. Запушьте ветку (`git push origin feature/AmazingFeature`)
+5. Откройте Pull Request
 
-Please read our [Contributing Guidelines](CONTRIBUTING.md) for details on our code of conduct and development process.
+Пожалуйста, ознакомьтесь с нашими [Руководящими принципами участия](CONTRIBUTING.md) для получения подробной информации о нашем кодексе поведения и процессе разработки.
 
-## License
+## Лицензия
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+Этот проект лицензирован по лицензии MIT - смотрите файл [LICENSE](LICENSE) для получения подробной информации.
 
-## Support
+## Поддержка
 
-If you encounter any issues or have questions, please [file an issue](https://github.com/gakuzi/ai-debug-companion/issues) on our GitHub repository.
+Если вы столкнулись с какими-либо проблемами или у вас есть вопросы, пожалуйста, [создайте issue](https://github.com/gakuzi/ai-debug-companion/issues) в нашем репозитории GitHub.
 
-## Acknowledgments
+## Благодарности
 
-- Thanks to the Cloudflare Workers team for their excellent platform
-- Gemini API integration powered by Google AI
-- Inspired by the need for better debugging tools in the AI development community
+- Спасибо команде Cloudflare Workers за их отличную платформу
+- Интеграция с API Gemini обеспечена Google AI
+- Вдохновлены необходимостью лучших инструментов отладки в сообществе ИИ-разработчиков
 
 ---
 
-**AI Debug Companion** - Transform your AI application debugging experience with intelligent insights and deadlock resolution.
+**AI Debug Companion** - Преобразуйте опыт отладки вашего ИИ-приложения с помощью интеллектуальных инсайтов и разрешения тупиков.

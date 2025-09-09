@@ -14,7 +14,6 @@ import {
 import './App.css'
 
 function App() {
-  const [isBlackBoxOpen, setIsBlackBoxOpen] = useState(false)
   const [count, setCount] = useState(0)
 
   useEffect(() => {
@@ -146,11 +145,8 @@ function App() {
         </div>
       </header>
 
-      <BlackBox 
-        isOpen={isBlackBoxOpen}
-        onToggle={() => setIsBlackBoxOpen(!isBlackBoxOpen)}
-        height={300}
-      />
+      {/* Ваше приложение */}
+      <BlackBox height={300} />
     </div>
   )
 }

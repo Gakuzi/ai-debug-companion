@@ -30,8 +30,26 @@ Collector деплоится на Cloudflare Workers через GitHub Actions.
 
 ### Требования
 
-- Аккаунт Cloudflare с включёнными Workers и R2
+- Аккаунт Cloudflare с включенными Workers и R2
 - API токен с правами на деплой Workers и R2
+
+### Конфигурация wrangler.toml
+
+Пример конфигурации:
+
+```toml
+name = "ai-debug-collector"
+main = "src/worker.ts"
+compatibility_date = "2023-10-01"
+
+[[r2_buckets]]
+binding = "STORAGE"
+bucket_name = "ai-debug-storage"
+
+[vars]
+PROJECT_TOKENS = '{"test": "secret"}'
+GEMINI_API_KEY = "your-gemini-api-key"
+```
 
 ### Процесс деплоя
 
@@ -50,7 +68,7 @@ Agent публикуется как npm пакет. Для публикации 
 
 ```bash
 cd agent
-npm publish
+npm publish --access public
 ```
 
 ## Конфигурация окружения
@@ -59,8 +77,8 @@ npm publish
 
 ```env
 PROJECT_ID=test
-COLLECTOR_URL=[Collector URL]
-GEMINI_KEY=***
+COLLECTOR_URL=https://your-collector.YOUR-ACCOUNT.workers.dev
+GEMINI_KEY=your-gemini-api-key
 ```
 
 ## Мониторинг
@@ -79,3 +97,89 @@ GEMINI_KEY=***
 2. Убедитесь, что все необходимые секреты добавлены
 3. Проверьте конфигурацию wrangler.toml для Collector
 4. Убедитесь, что все зависимости установлены корректно
+
+## Локальная разработка
+
+### Запуск Analyzer локально
+
+```bash
+cd analyzer
+npm run dev
+```
+
+Analyzer будет доступен по адресу http://localhost:5173
+
+### Запуск Collector локально
+
+```bash
+cd collector
+npm run dev
+```
+
+Collector будет доступен по адресу http://localhost:8787
+
+### Тестирование end-to-end
+
+1. Запустите оба сервиса локально:
+   ```bash
+   npm run dev
+   ```
+
+2. Откройте Analyzer в браузере: http://localhost:5173
+
+3. Встройте Agent в тестовое приложение:
+   ```javascript
+   import { initAgent } from 'ai-debug-companion-agent';
+   
+   initAgent('test-project', 'http://localhost:8787');
+   ```
+
+4. Симулируйте ошибки в приложении:
+   ```javascript
+   import { logError } from 'ai-debug-companion-agent';
+   
+   logError('Тестовая ошибка', { 
+     component: 'TestComponent',
+     action: 'testAction'
+   });
+   ```
+
+5. Используйте функцию экспорта бандла:
+   ```javascript
+   import { exportBundle } from 'ai-debug-companion-agent';
+   
+   const bundle = exportBundle();
+   console.log(JSON.stringify(bundle, null, 2));
+   ```
+
+6. Загрузите бандл в Analyzer для анализа
+
+7. Используйте функцию анализа тупиков в Analyzer
+
+## Публикация новой версии
+
+### Обновление версии
+
+1. Обновите версию в корневом package.json:
+   ```json
+   {
+     "version": "1.1.0"
+   }
+   ```
+
+2. Обновите версии в подпакетах:
+   - `agent/package.json`
+   - `collector/package.json`
+   - `analyzer/package.json`
+   - `schemas/package.json`
+
+### Публикация Agent
+
+```bash
+cd agent
+npm publish --access public
+```
+
+### Деплой всех компонентов
+
+После пуша в ветку `main`, GitHub Actions автоматически задеплоит все компоненты.
