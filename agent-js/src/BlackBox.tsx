@@ -1,223 +1,120 @@
-// BlackBox.tsx
-import * as React from 'react';
-import { useState, useEffect } from 'react';
-import { getLogger, LogEntry, Level } from './logger';
+/* eslint-disable */
+import React, { useEffect, useMemo, useRef, useState } from 'react'
+import { getMemoryLog, logInfo, logWarn, logError, type LogEntry } from './logger'
 
-interface BlackBoxProps {
-  projectId: string;
+const levelToColor: Record<string, string> = {
+  ERROR: 'text-red-500',
+  WARN: 'text-yellow-500',
+  INFO: 'text-white',
+  DEBUG: 'text-gray-300',
+  FATAL: 'text-red-400',
 }
 
-const BlackBox: React.FC<BlackBoxProps> = ({ projectId }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [logs, setLogs] = useState<LogEntry[]>([]);
-  const [filter, setFilter] = useState<Level | 'ALL'>('ALL');
-  const [tupikMode, setTupikMode] = useState(false);
-  const [tupikDescription, setTupikDescription] = useState('');
+const filters = ['ВСЁ', 'ОШИБКА', 'ПРЕДУПРЕЖДЕНИЕ', 'ИНФО', 'DEBUG'] as const
 
-  // Update logs from memory
+type Filter = typeof filters[number]
+
+function applyFilter(entries: LogEntry[], filter: Filter): LogEntry[] {
+  switch (filter) {
+    case 'ВСЁ':
+      return entries
+    case 'ОШИБКА':
+      return entries.filter(e => e.level === 'ERROR' || e.level === 'FATAL')
+    case 'ПРЕДУПРЕЖДЕНИЕ':
+      return entries.filter(e => e.level === 'WARN')
+    case 'ИНФО':
+      return entries.filter(e => e.level === 'INFO')
+    case 'DEBUG':
+      return entries.filter(e => e.level === 'DEBUG')
+  }
+}
+
+export function BlackBox(): JSX.Element {
+  const [expanded, setExpanded] = useState(false)
+  const [tick, setTick] = useState(0)
+  const [filter, setFilter] = useState<Filter>('ВСЁ')
+  const [tupikOpen, setTupikOpen] = useState(false)
+  const tupikRef = useRef<HTMLTextAreaElement | null>(null)
+
   useEffect(() => {
-    const interval = setInterval(() => {
-      const logger = getLogger();
-      if (logger) {
-        const memoryLogs = logger.getMemoryLog();
-        setLogs(memoryLogs);
-      }
-    }, 1000);
+    const id = setInterval(() => setTick(t => t + 1), 1000)
+    return () => clearInterval(id)
+  }, [])
 
-    return () => clearInterval(interval);
-  }, []);
+  const entries = useMemo(() => getMemoryLog().slice(-50), [tick])
+  const visible = useMemo(() => applyFilter(entries, filter), [entries, filter])
 
-  const filteredLogs = filter === 'ALL' 
-    ? logs 
-    : logs.filter(log => log.level === filter);
-
-  const displayedLogs = [...filteredLogs].reverse().slice(0, 50);
-
-  const getLevelColor = (level: Level) => {
-    switch (level) {
-      case 'ERROR': case 'FATAL':
-        return 'text-red-500';
-      case 'WARN':
-        return 'text-yellow-500';
-      case 'INFO':
-        return 'text-blue-400';
-      case 'DEBUG':
-        return 'text-gray-400';
-      default:
-        return 'text-white';
-    }
-  };
-
-  const copyLogs = () => {
-    const logsText = displayedLogs.map(log => 
-      `[${log.ts}] ${log.level}: ${log.msg}`
-    ).join('\n');
-    
-    navigator.clipboard.writeText(logsText);
-  };
-
+  const copy = async () => {
+    await navigator.clipboard.writeText(JSON.stringify(entries, null, 2))
+  }
   const saveToFile = () => {
-    const logsText = displayedLogs.map(log => 
-      `[${log.ts}] ${log.level}: ${log.msg}`
-    ).join('\n');
-    
-    const blob = new Blob([logsText], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `logs-${projectId}-${new Date().toISOString()}.txt`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-  };
-
+    const blob = new Blob([JSON.stringify(entries, null, 2)], { type: 'application/json' })
+    const a = document.createElement('a')
+    a.href = URL.createObjectURL(blob)
+    a.download = `logs-${Date.now()}.json`
+    a.click()
+    URL.revokeObjectURL(a.href)
+  }
   const downloadBundle = () => {
-    // In a real implementation, this would collect more data
-    alert('Бандл будет скачан');
-  };
+    const payload = { logs: entries, meta: { createdAt: new Date().toISOString() } }
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' })
+    const a = document.createElement('a')
+    a.href = URL.createObjectURL(blob)
+    a.download = `bundle-${Date.now()}.json`
+    a.click()
+    URL.revokeObjectURL(a.href)
+  }
 
-  const handleTupikSubmit = () => {
-    if (tupikDescription.trim()) {
-      // In a real implementation, this would send the tupik data to the analyzer
-      alert('Данные отправлены в анализатор!');
-      setTupikMode(false);
-      setTupikDescription('');
-    }
-  };
+  const sendTupik = () => {
+    const desc = tupikRef.current?.value?.trim()
+    if (!desc) return
+    logWarn('🚧 Запрос на разблокировку тупика', { payload: { description: desc } })
+    alert('Данные отправлены в анализатор!')
+    setTupikOpen(false)
+  }
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-gray-800 text-white font-mono z-50">
-      {/* Collapsed view */}
-      {!isOpen && (
-        <div 
-          className="h-16 flex items-center justify-between px-4 cursor-pointer border-t border-gray-700"
-          onClick={() => setIsOpen(true)}
-        >
-          <div className="flex items-center">
-            <div className="w-3 h-3 rounded-full bg-red-500 mr-2"></div>
-            <span>BlackBox AI Debug Companion</span>
+    <div className={`fixed left-0 right-0 ${expanded ? 'bottom-0 h-[200px]' : 'bottom-0 h-[60px]'} bg-gray-800 text-white font-mono shadow-lg z-50`}>
+      <div className="flex items-center justify-between px-3 py-2 border-b border-gray-700">
+        <div className="flex items-center gap-2">
+          <button className="px-2 py-1 bg-gray-700 rounded" onClick={() => setExpanded(e => !e)}>
+            {expanded ? 'Свернуть' : 'Развернуть'}
+          </button>
+          <div className="flex gap-1">
+            {filters.map(f => (
+              <button key={f} className={`px-2 py-1 rounded ${filter === f ? 'bg-blue-600' : 'bg-gray-700'}`} onClick={() => setFilter(f)}>
+                {f}
+              </button>
+            ))}
           </div>
-          <div className="flex space-x-2">
-            <span className="bg-red-500 text-xs px-2 py-1 rounded">ERROR: {logs.filter(l => l.level === 'ERROR' || l.level === 'FATAL').length}</span>
-            <span className="bg-yellow-500 text-xs px-2 py-1 rounded">WARN: {logs.filter(l => l.level === 'WARN').length}</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <button className="px-2 py-1 bg-gray-700 rounded" onClick={copy}>Копировать</button>
+          <button className="px-2 py-1 bg-gray-700 rounded" onClick={saveToFile}>Сохранить в файл</button>
+          <button className="px-2 py-1 bg-gray-700 rounded" onClick={downloadBundle}>Скачать бандл</button>
+          <button className="px-2 py-1 bg-yellow-700 rounded" onClick={() => setTupikOpen(v => !v)}>🚧 Тупик?</button>
+        </div>
+      </div>
+
+      {tupikOpen && (
+        <div className="p-3 border-b border-gray-700">
+          <label className="block text-sm mb-1">Опишите тупик: какая ошибка?</label>
+          <textarea ref={tupikRef} className="w-full h-20 bg-gray-900 text-white p-2 rounded" placeholder="Например: шаги рассуждения зациклились..." />
+          <div className="mt-2">
+            <button className="px-3 py-1 bg-green-700 rounded" onClick={sendTupik}>Разблокировать Тупик</button>
           </div>
         </div>
       )}
 
-      {/* Expanded view */}
-      {isOpen && (
-        <div className="h-96 flex flex-col">
-          {/* Header */}
-          <div className="flex items-center justify-between p-2 bg-gray-900 border-b border-gray-700">
-            <div className="flex items-center">
-              <div className="w-3 h-3 rounded-full bg-red-500 mr-2"></div>
-              <span>BlackBox AI Debug Companion</span>
-            </div>
-            <div className="flex space-x-2">
-              <button 
-                onClick={() => setIsOpen(false)}
-                className="px-2 py-1 bg-gray-700 hover:bg-gray-600 rounded text-sm"
-              >
-                ↓ Свернуть
-              </button>
-            </div>
+      <div className="overflow-y-auto h-full p-2 text-sm">
+        {visible.map((e, idx) => (
+          <div key={idx} className={`whitespace-pre-wrap ${levelToColor[e.level] ?? 'text-white'}`}>
+            [{new Date(e.ts).toLocaleTimeString()}] {e.level}: {e.msg}
           </div>
-
-          {/* Controls */}
-          <div className="flex items-center p-2 bg-gray-700 text-sm space-x-2">
-            <select 
-              value={filter}
-              onChange={(e) => setFilter(e.target.value as Level | 'ALL')}
-              className="bg-gray-600 text-white px-2 py-1 rounded"
-            >
-              <option value="ALL">ВСЁ</option>
-              <option value="ERROR">ОШИБКА</option>
-              <option value="WARN">ПРЕДУПРЕЖДЕНИЕ</option>
-              <option value="INFO">ИНФО</option>
-              <option value="DEBUG">DEBUG</option>
-            </select>
-
-            <button 
-              onClick={copyLogs}
-              className="px-2 py-1 bg-gray-600 hover:bg-gray-500 rounded"
-            >
-              Копировать
-            </button>
-            <button 
-              onClick={saveToFile}
-              className="px-2 py-1 bg-gray-600 hover:bg-gray-500 rounded"
-            >
-              Сохранить в файл
-            </button>
-            <button 
-              onClick={downloadBundle}
-              className="px-2 py-1 bg-gray-600 hover:bg-gray-500 rounded"
-            >
-              Скачать бандл
-            </button>
-
-            {!tupikMode ? (
-              <button 
-                onClick={() => setTupikMode(true)}
-                className="px-2 py-1 bg-orange-600 hover:bg-orange-500 rounded flex items-center"
-              >
-                🚧 Тупик?
-              </button>
-            ) : (
-              <button 
-                onClick={() => setTupikMode(false)}
-                className="px-2 py-1 bg-gray-600 hover:bg-gray-500 rounded"
-              >
-                Отмена
-              </button>
-            )}
-          </div>
-
-          {/* Tupik Mode */}
-          {tupikMode && (
-            <div className="p-2 bg-gray-700 border-b border-gray-600">
-              <textarea
-                value={tupikDescription}
-                onChange={(e) => setTupikDescription(e.target.value)}
-                placeholder="Опишите тупик: какая ошибка?"
-                className="w-full h-20 p-2 bg-gray-600 text-white rounded mb-2"
-              />
-              <button 
-                onClick={handleTupikSubmit}
-                disabled={!tupikDescription.trim()}
-                className="px-3 py-1 bg-orange-600 hover:bg-orange-500 rounded disabled:opacity-50"
-              >
-                Разблокировать Тупик
-              </button>
-            </div>
-          )}
-
-          {/* Logs */}
-          <div className="flex-1 overflow-y-auto p-2 bg-gray-900">
-            {displayedLogs.length === 0 ? (
-              <div className="text-gray-500 text-center py-4">
-                Нет логов для отображения
-              </div>
-            ) : (
-              <div className="space-y-1">
-                {displayedLogs.map((log, index) => (
-                  <div 
-                    key={index} 
-                    className={`text-xs ${getLevelColor(log.level)}`}
-                  >
-                    <span className="mr-2">[{log.ts}]</span>
-                    <span className="font-bold mr-2">{log.level}:</span>
-                    <span>{log.msg}</span>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-      )}
+        ))}
+      </div>
     </div>
-  );
-};
+  )
+}
 
-export default BlackBox;
+export default BlackBox

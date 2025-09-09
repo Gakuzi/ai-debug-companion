@@ -1,129 +1,18 @@
-// tupik.ts
-import { LogEntry } from './logger';
+/* eslint-disable */
+import { logInfo } from './logger'
 
-let apiKey: string | null = null;
+let TUPIK_API_KEY: string | null = null
 
-export function initTupikMode(key: string) {
-  apiKey = key;
+export function initTupikMode(apiKey: string): void {
+  TUPIK_API_KEY = apiKey
 }
 
 export function generateDataCollector(description: string, projectRoot: string): string {
   // Пояснение на русском: Генерирует скрипт для сбора файлов/логов/deps, маскирует секреты.
-  return `
-// AI Debug Companion Tupik Collector Script
-// Generated for: ${description}
-// Project Root: ${projectRoot}
-
-const fs = require('fs');
-const path = require('path');
-
-// Configuration
-const PROJECT_ROOT = '${projectRoot}';
-const OUTPUT_FILE = 'tupik-analysis-bundle.json';
-
-// Secret patterns to redact
-const SECRET_PATTERNS = [
-  /api[_-]?key[\\s]*[:=][\\s]*['"]([^'"]*)['"]/gi,
-  /token[\\s]*[:=][\\s]*['"]([^'"]*)['"]/gi,
-  /password[\\s]*[:=][\\s]*['"]([^'"]*)['"]/gi,
-  /secret[\\s]*[:=][\\s]*['"]([^'"]*)['"]/gi
-];
-
-// Function to redact secrets
-function redactSecrets(content) {
-  let redactedContent = content;
-  SECRET_PATTERNS.forEach(pattern => {
-    redactedContent = redactedContent.replace(pattern, (match, secret) => {
-      return match.replace(secret, '***REDACTED***');
-    });
-  });
-  return redactedContent;
+  const prompt = `Generate a Node.js script that, when executed in ${projectRoot}, collects:\n- last 200 lines of logs if present;\n- package.json dependencies;\n- list of source files (tsx, ts, js) with paths;\n- redact any api_key/token/secrets to ***;\n\nContext: ${description}\nOutput JSON to stdout.`
+  return prompt
 }
 
-// Function to collect file information
-function collectFileData(filePath) {
-  try {
-    const fullPath = path.join(PROJECT_ROOT, filePath);
-    const content = fs.readFileSync(fullPath, 'utf8');
-    return {
-      path: filePath,
-      content: redactSecrets(content)
-    };
-  } catch (error) {
-    return {
-      path: filePath,
-      error: error.message
-    };
-  }
-}
-
-// Function to collect dependencies
-function collectDependencies() {
-  try {
-    const packagePath = path.join(PROJECT_ROOT, 'package.json');
-    const packageJson = JSON.parse(fs.readFileSync(packagePath, 'utf8'));
-    return {
-      dependencies: packageJson.dependencies || {},
-      devDependencies: packageJson.devDependencies || {}
-    };
-  } catch (error) {
-    return {
-      error: error.message
-    };
-  }
-}
-
-// Function to collect recent logs (this is a placeholder - actual implementation would depend on your logging system)
-function collectRecentLogs() {
-  // In a real implementation, this would fetch recent logs from your logging system
-  return [
-    {
-      timestamp: new Date().toISOString(),
-      level: 'INFO',
-      message: 'Tupik analysis initiated'
-    }
-  ];
-}
-
-// Main collection function
-function collectTupikData() {
-  console.log('Collecting data for tupik analysis...');
-
-  const data = {
-    description: '${description}',
-    timestamp: new Date().toISOString(),
-    files: [],
-    dependencies: collectDependencies(),
-    logs: collectRecentLogs(),
-    environment: {
-      nodeVersion: process.version,
-      platform: process.platform,
-      arch: process.arch
-    }
-  };
-
-  // In a real implementation, you would determine which files are relevant
-  // For this example, we'll just collect package.json
-  data.files.push(collectFileData('package.json'));
-
-  // Write to file
-  fs.writeFileSync(OUTPUT_FILE, JSON.stringify(data, null, 2));
-  console.log(\`Tupik data collected and saved to \${OUTPUT_FILE}\`);
-}
-
-// Run the collection
-collectTupikData();
-`;
-}
-
-export function reportTupik(description: string, data: any) {
-  console.log('Тупик отправлен');
-  
-  // In a real implementation, this would send the data to your analyzer service
-  // For now, we'll just log it
-  console.log('Tupik Report:', {
-    description,
-    data,
-    timestamp: new Date().toISOString()
-  });
+export async function reportTupik(description: string): Promise<void> {
+  logInfo('Тупик отправлен', { payload: { description, hasKey: Boolean(TUPIK_API_KEY) } })
 }

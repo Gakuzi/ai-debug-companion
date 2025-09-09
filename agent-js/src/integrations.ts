@@ -1,92 +1,42 @@
-// integrations.ts
-import { logError, logInfo } from './logger';
+/* eslint-disable */
+import { logError, logInfo } from './logger'
 
-// Install global error handlers
-export function installGlobalErrorHandlers() {
-  // Handle uncaught exceptions
-  process.on('uncaughtException', (error) => {
+export function installGlobalErrorHandlers(): void {
+  if (typeof window === 'undefined') return
+  window.addEventListener('error', (event) => {
     logError('Необработанная ошибка', {
-      stack: error.stack,
-      payload: {
-        message: error.message,
-        name: error.name
-      }
-    });
-  });
-
-  // Handle unhandled promise rejections
-  process.on('unhandledRejection', (reason, promise) => {
-    logError('Необработанная ошибка промиса', {
-      payload: {
-        reason: reason instanceof Error ? reason.message : String(reason),
-        promise: promise
-      }
-    });
-  });
-
-  // For browser environments
-  if (typeof window !== 'undefined') {
-    window.addEventListener('error', (event) => {
-      logError('Необработанная ошибка в браузере', {
-        msg: event.message,
-        stack: event.error?.stack,
-        payload: {
-          filename: event.filename,
-          lineno: event.lineno,
-          colno: event.colno
-        }
-      });
-    });
-
-    window.addEventListener('unhandledrejection', (event) => {
-      logError('Необработанная ошибка промиса в браузере', {
-        payload: {
-          reason: event.reason instanceof Error ? event.reason.message : String(event.reason),
-          promise: event.promise
-        }
-      });
-    });
-  }
+      stack: event?.error?.stack,
+      payload: { message: String(event?.error?.message ?? event?.message), source: event?.filename, lineno: event?.lineno, colno: event?.colno },
+    })
+  })
+  window.addEventListener('unhandledrejection', (event) => {
+    const reason = (event as PromiseRejectionEvent).reason
+    logError('Необработанное отклонение промиса', {
+      stack: reason?.stack,
+      payload: { reason },
+    })
+  })
 }
 
-// Wrap fetch to log HTTP requests
-export function wrapFetch(originalFetch: typeof fetch = fetch): typeof fetch {
-  return async function fetchWrapper(input: RequestInfo | URL, init?: RequestInit): Promise<Response> {
-    const startTime = Date.now();
-    const url = input instanceof URL ? input.toString() : typeof input === 'string' ? input : input.url;
-    const method = init?.method || (input as Request).method || 'GET';
-
+export function wrapFetch(): void {
+  if (typeof window === 'undefined' && typeof globalThis.fetch === 'undefined') return
+  const origFetch: typeof fetch | undefined = globalThis.fetch
+  if (!origFetch) return
+  globalThis.fetch = async (input: RequestInfo | URL, init?: RequestInit): Promise<Response> => {
+    const start = Date.now()
+    let method = 'GET'
+    let url = ''
+    if (typeof input === 'string') { url = input } else if (input instanceof URL) { url = input.toString() } else { url = input.url; method = input.method || method }
+    if (init?.method) method = init.method
     try {
-      const response = await originalFetch(input, init);
-      const latencyMs = Date.now() - startTime;
-
-      logInfo(`HTTP запрос завершен: ${method} ${url}`, {
-        http: {
-          method,
-          url,
-          status: response.status,
-          latencyMs
-        }
-      });
-
-      return response;
-    } catch (error) {
-      const latencyMs = Date.now() - startTime;
-
-      logError(`HTTP запрос завершился ошибкой: ${method} ${url}`, {
-        http: {
-          method,
-          url,
-          status: 0, // 0 indicates network error
-          latencyMs
-        },
-        stack: error instanceof Error ? error.stack : undefined,
-        payload: {
-          errorMessage: error instanceof Error ? error.message : String(error)
-        }
-      });
-
-      throw error;
+      const res = await origFetch(input as any, init)
+      const latencyMs = Date.now() - start
+      logInfo('HTTP запрос', { http: { method: method as any, url, status: res.status, latencyMs } })
+      return res
+    } catch (e) {
+      const latencyMs = Date.now() - start
+      logError('HTTP ошибка', { http: { method: method as any, url, latencyMs }, payload: { error: String(e) } })
+      throw e
     }
-  };
+  }
 }
